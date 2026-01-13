@@ -1,0 +1,112 @@
+<div class="flex gap-2 sm:px-4 lg:px-6 pt-16 lg:pt-24 pt-10 py-8">
+    <!-- Sidebar avec liste des chaînes -->
+    <aside class=" md:block hidden fixed left-0 top-24 h-full w-80 bg-white shadow-xl z-50 overflow-y-auto">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900">Autre Chaînes</h2>
+            </div>
+        </div>
+
+        <nav class="p-4">
+            @for (channel of otherChannels; track channel.id){
+                <app-channel-nav-card [otherChannel]="channel"></app-channel-nav-card>
+            }
+        </nav>
+    </aside>
+
+    <main class="ml-0 md:ml-80 transition-all duration-300">
+        <app-channel-profil [channelInfos]="channelInfos"></app-channel-profil>
+    <div>
+        <h1 class="text-xl md:text-2xl lg:text-4xl font-bold px-4 py-6">
+            Last 10 podcasts
+        </h1>
+    </div>
+<!-- Video 1 -->
+<div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 group cursor-pointer">
+  <div class="flex flex-col lg:flex-row">
+    
+    <!-- Thumbnail -->
+    <div class="relative lg:w-90 sm:h-100 lg:flex-shrink-0">
+      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=225&fit=crop" 
+           alt="Video thumbnail" 
+           class="w-full h-48 lg:h-full object-cover group-hover:scale-105 transition-transform duration-300">
+      <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+        <div class="w-16 h-16 bg-blue-600 bg-opacity-90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M8 5v10l8-5-8-5z"/>
+          </svg>
+        </div>
+      </div>
+      <span class="absolute bottom-3 right-3 bg-black bg-opacity-80 text-white text-sm px-3 py-1 rounded-lg font-medium">24:15</span>
+    </div>
+
+    <!-- Content -->
+    <div class="flex-1 p-6 lg:p-8">
+      <!-- Title and Save -->
+      <div class="flex flex-wrap justify-between mb-4">
+        <h2 class="text-xl lg:text-2xl font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300">
+          The Future of AI: Interview with a Machine Learning Expert
+        </h2>
+       <div>
+        <span class="text-md text-gray-500">posted 2 days ago</span>
+       </div>
+      </div>
+
+      <!-- Guest Profile -->
+      <div class="flex items-center space-x-4 mb-4">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Guest photo"
+             class="w-18 h-18 rounded-full object-cover border-2 border-white">
+        <div>
+          <p class="text-lg font-bold text-gray-800">Dr. Alice Martin</p>
+          <p class="text-base text-gray-500 font-semibold">ML Researcher at OpenAI</p>
+         <span class="font-medium text-sm text-gray-500">guest of this podcast</span>
+
+        </div>
+      </div>
+
+      <!-- Description -->
+      <p class="text-gray-600 text-base mb-4 line-clamp-2">
+        Discover the latest advancements in artificial intelligence with our guest expert. A deep discussion on the challenges and opportunities in modern Machine Learning.
+      </p>
+
+      <!-- Stats -->
+      <div class="flex items-center text-sm text-gray-500 mb-4 space-x-6">
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10z"/>
+          </svg>
+          <span class="font-medium">1.2M views</span>
+        </div>
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+          </svg>
+          <span class="font-medium">48k likes</span>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full font-medium hover:bg-blue-200 transition-colors cursor-pointer">AI</span>
+        <span class="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full font-medium hover:bg-green-200 transition-colors cursor-pointer">Tech</span>
+        <span class="bg-purple-100 text-purple-800 text-sm px-3 py-1 rounded-full font-medium hover:bg-purple-200 transition-colors cursor-pointer">Machine Learning</span>
+      </div>
+
+      <!-- Extract Questions Button -->
+      <button class="bg-blue-100 hover:bg-blue-200 text-blue-800 hover:cursor-pointer py-2 px-4 rounded-lg transition-all duration-200">
+        Extract Questions
+      </button>
+    </div>
+  </div>
+</div>
+
+    </main>
+</div>
+
+                   

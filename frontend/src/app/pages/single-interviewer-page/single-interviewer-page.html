@@ -1,0 +1,207 @@
+<div>
+  <!-- Fixed Navbar -->
+  <div class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-lg">
+    <app-navbar 
+      (searchChange)="onSearchChange($event)" 
+      (searchCleared)="onSearchCleared()"
+    ></app-navbar>
+  </div>
+
+  <div class="pt-24 max-w-6xl mx-auto max-sm:px-1 px-6 lg:px-8 py-8">
+    @if (interviewer()) {
+   <aside class="flex px-4 py-2 items-center space-x-3 text-lg font-medium text-gray-900">
+  <a href="/interviewers" class="hover:text-indigo-600 transition">Interviewers</a>
+
+  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+  </svg>
+
+  <span class="text-indigo-600 font-semibold cursor-default">{{ interviewer()?.name }}</span>
+</aside>
+
+      <!-- Interviewer Header -->
+      <div class="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden mb-8">
+        <div class="relative bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 px-8 py-12">
+          <div class="absolute inset-0 bg-black opacity-10"></div>
+          <div class="relative flex flex-col lg:flex-row items-center lg:items-start gap-8">
+
+            <div class="flex-shrink-0">
+              <div class="w-40 h-40 rounded-3xl overflow-hidden shadow-2xl ring-8 ring-white/20 bg-gray-400 flex items-center justify-center">
+                @if (interviewer()?.image_profil) {
+                  <img [src]="interviewer()?.image_profil" [alt]="interviewer()?.name" class="max-w-full max-h-full object-contain rounded-lg" />
+                } @else {
+                  <div class="w-full h-full flex items-center justify-center shadow-lg ring-4 ring-white group-hover:ring-blue-200 transition-all duration-300">
+                    <span class="text-white font-bold text-2xl md:text-4xl lg:text-6xl">
+                      {{ interviewer()?.initials }}
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="flex-1 text-center lg:text-left text-white">
+              <h1 class="text-2xl font-bold mb-2 leading-tight">{{ interviewer()?.name }}</h1>
+              <p class="text-xl mb-2 text-white/90 leading-relaxed">{{ interviewer()?.activity }}</p>
+              @if (interviewer()?.location) {
+              <div class="flex items-center justify-center lg:justify-start gap-2 mb-6">
+                <i class="fas fa-map-marker-alt text-red-300"></i>
+                <span class="text-sm">{{ interviewer()?.location }}</span>
+              </div>
+              }
+              <div class=" hidden  flex-wrap justify-center lg:justify-start gap-4">
+                @if(!interviewer()?.follower) {
+                  <button (click)="onFollowClick()" class="flex items-center gap-2 bg-white text-blue-600 font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-user-plus"></i> Follow
+                  </button>
+                } @else {
+                  <span class="inline-flex items-center gap-2 bg-white text-green-600 font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform">
+                    <i class="fas fa-check-circle"></i> Following
+                  </span>
+                }
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-8">
+
+          <!-- About Section -->
+           @if (interviewer()?.biography) {
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 lg:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <i class="fas fa-user text-blue-500"></i> About
+            </h2>
+            <div class="prose prose-lg text-gray-700 leading-relaxed" [innerHTML]="biographyHtml()"></div>
+          </div>
+          }
+          <!-- Expertise Section -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 lg:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <i class="fas fa-star text-yellow-500"></i> Areas of Expertise
+            </h2>
+            <div class="flex flex-wrap gap-3">
+              @for (expertise of interviewer()?.expertise; track expertise) {
+                <span class="bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 px-4 py-2 rounded-full font-medium border border-purple-200 hover:from-purple-200 hover:to-blue-200 transition-all duration-300">
+                  {{ expertise }}
+                </span>
+              }
+            </div>
+          </div>
+
+          <!-- Recent Podcasts -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 lg:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <i class="fas fa-video text-red-500"></i> Recent Podcasts
+            </h2>
+            <div class="space-y-6">
+              @for(video of hostedPodcasts(); track video.id) {
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-gray-200 hover:shadow-md transition-all duration-300">
+                  <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="w-full sm:w-48 flex-shrink-0">
+                      @if(video.logo_url) {
+                        <img [src]="video.logo_url" [alt]="'Thumbnail for ' + video.title" class="w-full h-48 sm:h-full object-cover rounded-t-xl sm:rounded-t-none sm:rounded-l-xl rounded-xl" />
+                      } @else {
+                        <div class="w-full h-48 bg-gradient-to-br from-blue-400 to-purple-500 rounded-t-xl sm:rounded-t-none sm:rounded-l-xl flex items-center justify-center">
+                          <i class="fas fa-play text-white text-3xl opacity-90"></i>
+                        </div>
+                      }
+                    </div>
+                    <div class="flex-1">
+                      <h3 class="font-bold text-gray-800 mb-2 line-clamp-2">{{ video.title }}</h3>
+                      <p class="text-gray-600 text-sm mb-2">Topic: {{ video.topic }}</p>
+                      <div class="flex flex-wrap gap-3 text-gray-600 text-sm mb-3">
+                        <span class="flex items-center gap-1"><i class="fas fa-clock"></i>{{ video.duration }}</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-eye text-blue-500"></i>{{ video.view_count | number }}</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-thumbs-up text-green-500"></i>{{ video.like_count | number }}</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-calendar"></i>{{ video.duration_posted }}</span>
+                      </div>
+                      <a [attr.href]="'/podcasts/' + video.topic_id" class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:cursor-pointer hover:bg-red-700 text-white text-sm rounded-lg font-medium shadow hover:shadow-md transition-all duration-300">
+                        <i class="fab fa-youtube"></i> Watch
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-1 space-y-6">
+          <!-- Social Networks -->
+          @if (interviewer()?.linkedin || interviewer()?.twitter || interviewer()?.instagram || interviewer()?.facebook || interviewer()?.tiktok || interviewer()?.website) {
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+              <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-share-alt text-purple-500"></i> Social Networks</h3>
+              <div class="space-y-3">
+                @if(interviewer()?.linkedin) {
+                  <a [attr.href]="interviewer()?.linkedin" class="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center"><i class="fab fa-linkedin-in text-white"></i></div>
+                    <div class="font-medium text-gray-900">LinkedIn</div>
+                  </a>
+                }
+                @if(interviewer()?.twitter) {
+                  <a target="_blank" [attr.href]="interviewer()?.twitter" class="flex items-center gap-3 p-3 bg-sky-50 hover:bg-sky-100 rounded-lg transition-colors">
+                    <div class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center"><i class="fab fa-twitter text-white"></i></div>
+                    <div class="font-medium text-gray-900">Twitter</div>
+                  </a>
+                }
+                @if(interviewer()?.instagram) {
+                  <a target="_blank" [attr.href]="interviewer()?.instagram" class="flex items-center gap-3 p-3 bg-pink-50 hover:bg-pink-100 rounded-lg transition-colors">
+                    <div class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center"><i class="fab fa-instagram text-white"></i></div>
+                    <div class="font-medium text-gray-900">Instagram</div>
+                  </a>
+                }
+                @if(interviewer()?.facebook) {
+                  <a target="_blank" [attr.href]="interviewer()?.facebook" class="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                    <div class="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center"><i class="fab fa-facebook-f text-white"></i></div>
+                    <div class="font-medium text-gray-900">Facebook</div>
+                  </a>
+                }
+                @if(interviewer()?.tiktok) {
+                  <a target="_blank" [attr.href]="interviewer()?.tiktok" class="flex items-center gap-3 p-3 bg-black/5 hover:bg-black/10 rounded-lg transition-colors">
+                    <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center"><i class="fab fa-tiktok text-white"></i></div>
+                    <div class="font-medium text-gray-900">TikTok</div>
+                  </a>
+                }
+                @if(interviewer()?.website) {
+                  <a target="_blank" [attr.href]="interviewer()?.website" class="flex items-center gap-3 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+                    <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center"><i class="fas fa-link text-white"></i></div>
+                    <div class="font-medium text-gray-900">Website</div>
+                  </a>
+                }
+              </div>
+            </div>
+          }
+           <div class="lg:col-span-1">
+
+        <!-- Interviewers Section -->
+        @if(similarInterviewers().length > 0) {
+          <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Recommended podcast guests for you</h3>
+
+            @for(interviewer of similarInterviewers(); track interviewer.id) {
+               <app-interviewer-card [interviewer]="interviewer"></app-interviewer-card>
+            }
+          </div>
+        }
+
+      </div>
+
+        </div>
+
+      </div>
+       <!-- Sidebar -->
+      } @else {
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+        <strong class="font-bold">Error:</strong>
+        <span class="block sm:inline">This host is not referenced</span>
+      </div>
+    }
+  </div>
+</div>

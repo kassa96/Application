@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./backend
+    container_name: backend_fastapi
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend/static:/app/static
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_angular
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

@@ -1,0 +1,13 @@
+<div class="sidebar-item p-3 rounded-lg mb-2 cursor-pointer flex items-center space-x-3">
+  <img
+    [src]="otherChannel.logo_url || 'https://via.placeholder.com/40'"
+    class="w-10 h-10 rounded-full object-cover"
+    [alt]="otherChannel.name || 'Chaîne YouTube'"
+  />
+  <div class="flex-1">
+    <h4 class="font-semibold text-gray-900">{{ otherChannel.name }}</h4>
+    <p class="text-xs text-gray-500">
+      {{ otherChannel.subs_count | number:'1.0-0' }} abonnés
+    </p>
+  </div>
+</div>

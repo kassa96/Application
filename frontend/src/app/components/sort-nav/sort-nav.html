@@ -1,0 +1,327 @@
+<div class="flex justify-center flex-wrap items-center gap-3 p-2 bg-gray-50 rounded-lg">
+  <!-- Suggestion Button -->
+  <button 
+    (click)="onSuggestionClick()"
+    class="hidden flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium"
+    [class.bg-blue-600]="isSuggestionActive"
+    [class.text-white]="isSuggestionActive"
+    [class.hover\:bg-blue-700]="isSuggestionActive"
+    [class.bg-white]="!isSuggestionActive"
+    [class.text-gray-700]="!isSuggestionActive"
+    [class.border]="!isSuggestionActive"
+    [class.border-gray-200]="!isSuggestionActive"
+    [class.hover\:bg-gray-50]="!isSuggestionActive"
+  >
+    Suggestion
+  </button>
+
+  <!-- Language Dropdown -->
+  @if (languages.length > 0 ) {
+    <div class="hidden relative dropdown-container">
+      <button 
+  (click)="toggleDropdown('language')"
+  class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium"
+  [class.bg-blue-600]="!isSuggestionActive && selectedLanguage"
+  [class.text-white]="!isSuggestionActive && selectedLanguage"
+  [class.hover\:bg-blue-700]="!isSuggestionActive && selectedLanguage"
+  [class.bg-white]="!selectedLanguage"
+  [class.text-gray-700]="!selectedLanguage"
+  [class.border]="!selectedLanguage"
+  [class.border-gray-200]="!selectedLanguage"
+  [class.hover\:bg-gray-50]="!selectedLanguage"
+>
+  <!-- Icône globe/langue -->
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/>
+  </svg>
+
+  language: {{ getLabel(selectedLanguage) }}
+
+  <svg 
+    class="w-4 h-4 transition-transform duration-200" 
+    [class.rotate-180]="openDropdown === 'language'"
+    fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+  >
+    <polyline points="6,9 12,15 18,9"/>
+  </svg>
+</button>
+
+      @if (openDropdown === 'language') {
+        <div class="absolute left-0 top-full mt-2 w-56 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+          <div class="py-2">
+            @for (language of languages; track language) {
+              <button
+                (click)="selectLanguage(language)"
+                class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-150 flex items-center justify-between"
+                [class.bg-blue-50]="selectedLanguage === language"
+                [class.text-blue-600]="selectedLanguage === language"
+              >
+                <span>{{ language }}</span>
+                @if (selectedLanguage === language) {
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                }
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+    </div>
+  }
+
+@if (locations.length > 0) {
+  <div class="relative dropdown-container">
+    <button 
+  (click)="toggleDropdown('location')"
+  class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium"
+  [class.bg-blue-600]="!isSuggestionActive && selectedLocation"
+  [class.text-white]="!isSuggestionActive && selectedLocation"
+  [class.hover\:bg-blue-700]="!isSuggestionActive && selectedLocation"
+  [class.bg-white]="!selectedLocation"
+  [class.text-gray-700]="!selectedLocation"
+  [class.border]="!selectedLocation"
+  [class.border-gray-200]="!selectedLocation"
+  [class.hover\:bg-gray-50]="!selectedLocation"
+>
+  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 
+             2.5 2.5 0 0 1 0 5z"/>
+  </svg>
+
+  location: {{ getLabel(selectedLocation) }}
+
+  <svg 
+    class="w-4 h-4 transition-transform duration-200" 
+    [class.rotate-180]="openDropdown === 'location'"
+    fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+  >
+    <polyline points="6,9 12,15 18,9"/>
+  </svg>
+</button>
+    @if (openDropdown === 'location') {
+      <div class="absolute left-0 top-full mt-2 w-56 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+        <div class="py-2">
+          @for (location of locations; track location) {
+            <button
+              (click)="selectLocation(location)"
+              class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-150 flex items-center justify-between"
+              [class.bg-blue-50]="selectedLocation === location"
+              [class.text-blue-600]="selectedLocation === location"
+            >
+              <span>{{ location }}</span>
+              @if (selectedLocation === location) {
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}
+
+
+  <!-- Category Dropdown -->
+  @if (section === 'podcast' && categories.length > 0) {
+    <div class="relative dropdown-container">
+      <button 
+        (click)="toggleDropdown('category')"
+        class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium"
+        [class.bg-blue-600]="!isSuggestionActive && selectedCategory"
+        [class.text-white]="!isSuggestionActive && selectedCategory"
+        [class.hover\:bg-blue-700]="!isSuggestionActive && selectedCategory"
+        [class.bg-white]="!selectedCategory"
+        [class.text-gray-700]="!selectedCategory"
+        [class.border]="!selectedCategory"
+        [class.border-gray-200]="!selectedCategory"
+        [class.hover\:bg-gray-50]="!selectedCategory"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>
+          <path d="M8 5v4"/>
+          <path d="M16 5v4"/>
+        </svg>
+        category: {{ getLabel(selectedCategory) }}
+        <svg 
+          class="w-4 h-4 transition-transform duration-200" 
+          [class.rotate-180]="openDropdown === 'category'"
+          fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+        >
+          <polyline points="6,9 12,15 18,9"/>
+        </svg>
+      </button>
+
+      @if (openDropdown === 'category') {
+        <div class="absolute left-0 top-full mt-2 w-56 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+          <div class="py-2">
+            @for (category of categories; track category) {
+              <button
+                (click)="selectCategory(category)"
+                class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-150 flex items-center justify-between"
+                [class.bg-blue-50]="selectedCategory === category"
+                [class.text-blue-600]="selectedCategory === category"
+              >
+                <span>{{ category }}</span>
+                @if (selectedCategory === category) {
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                }
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Subcategory Dropdown -->
+  @if (section === 'podcast' && selectedCategory && subcategories.length > 0) {
+    <div class="relative dropdown-container">
+      <button 
+        (click)="toggleDropdown('subcategory')"
+        class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium"
+        [class.bg-blue-600]="!isSuggestionActive && selectedSubcategory"
+        [class.text-white]="!isSuggestionActive && selectedSubcategory"
+        [class.hover\:bg-blue-700]="!isSuggestionActive && selectedSubcategory"
+        [class.bg-white]="!selectedSubcategory"
+        [class.text-gray-700]="!selectedSubcategory"
+        [class.border]="!selectedSubcategory"
+        [class.border-gray-200]="!selectedSubcategory"
+        [class.hover\:bg-gray-50]="!selectedSubcategory"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+        sub category: {{ getLabel(selectedSubcategory) }}
+        <svg 
+          class="w-4 h-4 transition-transform duration-200" 
+          [class.rotate-180]="openDropdown === 'subcategory'"
+          fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+        >
+          <polyline points="6,9 12,15 18,9"/>
+        </svg>
+      </button>
+
+      @if (openDropdown === 'subcategory') {
+        <div class="absolute left-0 top-full mt-2 w-56 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+          <div class="py-2">
+            @for (subcategory of subcategories; track subcategory) {
+              <button
+                (click)="selectSubcategory(subcategory)"
+                class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-150 flex items-center justify-between"
+                [class.bg-blue-50]="selectedSubcategory === subcategory"
+                [class.text-blue-600]="selectedSubcategory === subcategory"
+              >
+                <span>{{ subcategory }}</span>
+                @if (selectedSubcategory === subcategory) {
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                }
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Expertise Dropdown -->
+  @if (section === 'interviewer' && expertises.length > 0) {
+    <div class="relative dropdown-container">
+      <button 
+        (click)="toggleDropdown('expertise')"
+        class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium"
+        [class.bg-blue-600]="!isSuggestionActive && selectedExpertise"
+        [class.text-white]="!isSuggestionActive && selectedExpertise"
+        [class.hover\:bg-blue-700]="!isSuggestionActive && selectedExpertise"
+        [class.bg-white]="!selectedExpertise"
+        [class.text-gray-700]="!selectedExpertise"
+        [class.border]="!selectedExpertise"
+        [class.border-gray-200]="!selectedExpertise"
+        [class.hover\:bg-gray-50]="!selectedExpertise"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 20h9"/><path d="M12 4h9"/><path d="M4 9h16"/><path d="M4 15h16"/>
+        </svg>
+        expertise: {{ getLabel(selectedExpertise) }}
+        <svg 
+          class="w-4 h-4 transition-transform duration-200" 
+          [class.rotate-180]="openDropdown === 'expertise'"
+          fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+        >
+          <polyline points="6,9 12,15 18,9"/>
+        </svg>
+      </button>
+
+      @if (openDropdown === 'expertise') {
+        <div class="absolute left-0 top-full mt-2 w-56 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+          <div class="py-2">
+            @for (expertise of expertises; track expertise) {
+              <button
+                (click)="selectExpertise(expertise)"
+                class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-150 flex items-center justify-between"
+                [class.bg-blue-50]="selectedExpertise === expertise"
+                [class.text-blue-600]="selectedExpertise === expertise"
+              >
+                <span>{{ expertise }}</span>
+                @if (selectedExpertise === expertise) {
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                }
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Sort Dropdown -->
+  <div class="relative dropdown-container">
+    <button 
+      (click)="toggleDropdown('sort')"
+      class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium bg-blue-600 text-white hover:bg-blue-700"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/>
+      </svg>
+      Sort by: {{ getCurrentSortLabel() }}
+      <svg 
+        class="w-4 h-4 transition-transform duration-200" 
+        [class.rotate-180]="openDropdown === 'sort'"
+        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+      >
+        <polyline points="6,9 12,15 18,9"/>
+      </svg>
+    </button>
+
+    @if (openDropdown === 'sort') {
+      <div class="absolute right-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+        <div class="py-2">
+          @for (option of sortOptions; track option.value) {
+            <button
+              (click)="selectSortOption(option)"
+              class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-150 flex items-center justify-between"
+              [class.text-blue-600]="selectedSort === option.value"
+            >
+              <span>{{ option.label }}</span>
+              @if (selectedSort === option.value) {
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

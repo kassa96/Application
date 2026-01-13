@@ -1,0 +1,31 @@
+              <a [attr.href]="'/interviewers/' + interviewer.username" class="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl mb-4 hover:shadow-lg">
+                
+                <div class="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-purple-500 to-blue-600 text-white font-bold text-lg">
+                  @if(interviewer.image_profil) {
+                    <img [src]="interviewer.image_profil" alt="{{ interviewer.name }}" class="w-full h-full object-cover" />
+                  } @else {
+                    <span>
+                      {{ interviewer.initials }}
+                    </span>
+                  }
+                </div>
+
+                <div class="flex-1">
+                  <h4 class="font-bold text-gray-900">{{ interviewer.name }}</h4>
+                  <p class="text-sm text-gray-600 mb-2">{{ interviewer.expertise.join(" ") }}</p>
+                </div>
+                <div class="hidden">
+
+                @if(!interviewer.follower) {
+                  <button 
+                    (click)="onFollowClick()" 
+                    class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:cursor-pointer">
+                    Follow
+                  </button>
+                } @else {
+                  <span class="bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-medium">
+                    Following
+                  </span>
+                }
+                </div>
+            </a>

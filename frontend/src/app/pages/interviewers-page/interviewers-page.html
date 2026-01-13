@@ -1,0 +1,67 @@
+<div>
+  
+  <div class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-lg">
+<div class="flex flex-col ">
+      <div>
+      <app-navbar (searchChange)="onSearchChange($event)" (searchCleared)="onSearchCleared()">
+      </app-navbar>
+      
+    </div>
+    <div class="max-sm:pt-20 px-4 pt-22 mb-4">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+        <span class="gradient-text">Find the perfect speaker</span>
+      </h1>
+      <p class="text-gray-600 text-lg">
+Explore our community of guests through podcasts featuring experts, public figures, influencers, and creators on YouTube.
+      </p>
+    </div>
+
+    <div class="flex p-2 justify-center items-center">
+      <app-sort-nav (actionEvent)="onActionReceived($event)" section="interviewer"></app-sort-nav>
+    </div>
+
+</div>
+  </div>
+  <div class="max-sm:pt-90 pt-70 px-1 w-full">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <div class="flex-1">
+        <div 
+        class="flex flex-col gap-6" 
+        id="speakersGrid"
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="300"
+        (scrolled)="interviewerService.loadMore()"
+        >
+
+        @for (interviewer of interviewers(); track interviewer.id) {
+          <app-interviewer 
+            [interviewer]="interviewer"             
+            (follow)="onFollow($event)">
+          </app-interviewer>
+        }
+      </div>
+
+      @if (!loading() && !error() && interviewers().length === 0) {
+        <div class="mt-10 bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+          <p class="text-gray-700 text-lg mb-4">no speacker  or podcaster found for this filters or search terms.</p>
+          
+        </div>
+      }
+
+      @if (loading()){
+        <div class="flex justify-center col-span-full my-6">
+          <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      }
+
+      @if (error()){
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+          <strong class="font-bold">Erreur :</strong>
+          <span class="block sm:inline">Error occured when loading data.</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,77 @@
+<header class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md shadow-lg z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 lg:h-20">
+
+    <!-- Logo -->
+    <a href = "/" class="flex items-center flex-shrink-0">
+      <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-2 rounded-lg">
+        <i class="fas fa-podcast text-white text-lg lg:text-2xl"></i>
+      </div>
+        <span class="max-sm:hidden ml-2 lg:ml-3 text-lg lg:text-2xl font-bold gradient-text">
+          TalkFinder
+        </span>
+      </a>
+
+    <!-- Search -->
+    <div class="flex-1 mx-2 lg:mx-8 relative">
+      <input
+        #searchInput
+        type="text"
+        placeholder="Search Guest, host or podcast..."
+        [(ngModel)]="searchTermValue"
+        (ngModelChange)="onSearchChange($event)"
+        class="w-full px-3 lg:px-4 py-2 pl-8 lg:pl-10 pr-10 text-sm lg:text-base
+               bg-gray-50 border border-gray-200 rounded-full
+               focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+      >
+
+      <!-- Search Icon -->
+      <svg
+        class="w-6 h-6 lg:w-5 lg:h-5 text-gray-400 absolute left-2 lg:left-3 top-1/2 -translate-y-1/2"
+        fill="none"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        ></path>
+      </svg>
+
+      <!-- Clear Button -->
+      <button
+        type="button"
+        (click)="onClearSearch()"
+        [class.opacity-0]="!searchTermValue.length"
+        class="absolute right-2 lg:right-3 top-1/2 -translate-y-1/2
+               bg-red-100 hover:bg-red-200
+               text-blue-600 hover:text-blue-700
+               p-1.5 lg:p-2 rounded-full
+               transition-all duration-200 shadow-md
+               flex items-center justify-center cursor-pointer"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Links -->
+   <!-- Links -->
+<div class="flex items-center space-x-2 lg:space-x-6 text-sm lg:text-base">
+
+  <a href="/interviewers"
+    class="nav-link font-semibold lg:font-medium whitespace-nowrap text-gray-700 transition-colors"
+    [class.active-link]="isActive('/interviewers')">
+    Guests
+  </a>
+
+  <span class="hidden lg:inline text-gray-300">|</span>
+
+  <a href="/podcasts"
+    class="nav-link font-semibold lg:font-medium whitespace-nowrap text-gray-700 transition-colors"
+    [class.active-link]="isActive('/podcasts')">
+    Podcasts
+  </a>
+</div>
+
+  </div>
+</header>

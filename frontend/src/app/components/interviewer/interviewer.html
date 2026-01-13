@@ -1,0 +1,239 @@
+<div (click)="goToProfile(interviewer.username)" class="flex flex-col bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-2xl hover:cursor-pointer hover:border-blue-300 transition-all duration-500 transform hover:-translate-y-2 group">
+  
+  <!-- Header Section -->
+  <div class="px-4 py-2">
+    <div class="flex md:flex-row md:items-center gap-4 md:gap-6">
+      
+      <!-- Profile Image -->
+      <div class="flex">
+        @if (interviewer.image_profil) {
+          <img 
+            [src]="interviewer.image_profil" 
+            alt="{{ interviewer.name }}"
+            class="w-24 h-24 lg:w-28 lg:h-28 rounded-2xl object-cover shadow-lg ring-4 ring-white group-hover:ring-blue-200 transition-all duration-300"
+          />
+        } @else {
+          <div class="w-24 h-24 lg:w-28 lg:h-28 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg ring-4 ring-white group-hover:ring-blue-200 transition-all duration-300">
+            <span class="text-white font-bold text-lg md:text-xl lg:text-2xl">{{ interviewer.initials }}</span>
+          </div>
+        }
+      </div>
+
+      <!-- Profile Info -->
+      <div class="flex-1 space-y-2">
+        <h3 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
+          {{ interviewer.name }}
+        </h3>
+        
+        <!-- Expertise Tags -->
+        <div class="flex flex-wrap gap-2 mb-3">
+          @for (expertise_name of interviewer.expertise; track $index) {
+            <span class="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium border border-purple-200">
+              {{ expertise_name }}
+            </span>
+          }
+        </div>
+        
+        <!-- Location & Followers -->
+        <div class="flex flex-row gap-3 text-gray-600">
+          @if (interviewer.location) {
+            <div class="flex gap-1">
+              <i class="fas fa-map-marker-alt text-red-500"></i>
+              <span class="text-sm md:text-base">{{ interviewer.location }}</span>
+            </div>
+          }
+
+          @if (interviewer.followers_count > 0) {
+            <div class="hidden flex gap-1">
+              <i class="fas fa-users text-blue-500"></i>
+              <span class="text-sm md:text-base font-medium">{{ interviewer.followers_count | number }} followers</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="p-2">
+    
+    <!-- Activity Description -->
+    <div>
+      <p class="text-gray-700 text-base md:text-lg leading-relaxed font-medium">
+        {{ interviewer.activity }}
+      </p>
+    </div>
+
+    <!-- Video Section -->
+    @if (interviewer.videos && interviewer.videos.length > 0) {
+      <div class="flex items-center gap-2 sm:gap-4">
+        @if (!isFirstVideo()) {
+        <button (click)="prevVideo(interviewer.id); $event.stopPropagation()"
+          class="flex-shrink-0 p-2 sm:p-3 rounded-full shadow 
+                 transition transform focus:outline-none focus:ring-2
+                 focus:ring-blue-300
+                 text-white
+                 bg-blue-400 hover:bg-blue-500 hover:scale-110 hover:cursor-pointer">
+          <i class="fas fa-chevron-left text-sm sm:text-base"></i>
+        </button>
+}
+        <!-- Video Card -->
+        <div class="flex flex-col w-full">
+          <div class="flex p-2 gap-2 text-purple-700 items-baseline">
+            <i class="fas fa-video text-purple-500 text-lg"></i>
+            @if (interviewer.is_hoster) {
+              <span class="font-semibold text-base md:text-lg pb-2">
+                Discover a selection of recorded podcasts
+              </span>
+            } @else {
+              <span class="font-semibold text-base md:text-lg">
+                Explore top podcast appearances
+              </span>
+            }
+          </div>
+
+          <div class="flex-1 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl shadow-md overflow-hidden flex flex-col sm:flex-row gap-3 sm:gap-4">
+            
+            <!-- Thumbnail -->
+            <div class="w-full sm:w-48 flex-shrink-0">
+              @if (interviewer.currentVideo.logo_url) {
+                <img [src]="interviewer.currentVideo.logo_url"
+                     alt="Video thumbnail"
+                     class="w-full h-48 sm:h-full object-cover rounded-lg shadow-sm" />
+              } @else {
+                <div class="w-full h-48 bg-gradient-to-br from-red-100 to-red-200 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-play text-red-600 text-3xl"></i>
+                </div>
+              }
+            </div>
+
+            <div class="flex flex-col flex-1 max-sm:px-4 px-1 py-2">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1 gap-2">
+                <div class="flex items-center gap-1 text-gray-500 text-xs sm:text-sm">
+                  <span>{{ interviewer.currentVideo.duration_posted}}</span>
+                </div>
+              </div>
+
+              <h5 class="text-sm sm:text-base font-bold text-gray-800 mb-1 line-clamp-2">
+                {{ interviewer.currentVideo.title }}
+              </h5>
+              <h5 class="text-sm sm:text-base font-bold text-gray-500 mb-1 line-clamp-2">
+                Topic : {{ interviewer.currentVideo.topic }}
+              </h5>
+
+              <div class="flex flex-wrap gap-3 text-gray-600 text-xs sm:text-sm mb-1">
+                @if (interviewer.currentVideo.duration) {
+                  <div class="flex items-center gap-1"><i class="fas fa-clock"></i><span>{{ interviewer.currentVideo.duration}}</span></div>
+                }
+                @if (interviewer.currentVideo.view_count) {
+                  <div class="flex items-center gap-1"><i class="fas fa-eye text-blue-500"></i><span>{{ interviewer.currentVideo.view_count | number }}</span></div>
+                }
+                @if (interviewer.currentVideo.like_count) {
+                  <div class="flex items-center gap-1"><i class="fas fa-thumbs-up text-green-500"></i><span>{{ interviewer.currentVideo.like_count | number }}</span></div>
+                }
+              </div>
+
+              <div>
+                <a [attr.href]="'/podcasts/' + interviewer.currentVideo.id"  (click)="$event.stopPropagation()"
+                  class="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg font-medium shadow hover:shadow-md transition transform hover:scale-105">
+                  <i class="fab fa-youtube"></i> Watch Video
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bouton suivant -->
+       @if (!isLastVideo()) {
+ <button 
+  (click)="nextVideo(interviewer.id); $event.stopPropagation()"
+  class="flex-shrink-0 p-2 sm:p-3 rounded-full shadow 
+                 transition transform focus:outline-none focus:ring-2
+                 focus:ring-blue-300
+                 text-white
+                 bg-blue-400 hover:bg-blue-500 hover:scale-110 hover:cursor-pointer">
+    <i class="fas fa-chevron-right text-sm sm:text-base"></i>
+</button>
+
+}     
+</div>
+    }
+
+    <!-- Suggested Topics -->
+    <div class="">
+      <div class="flex p-2 text-gray-700">
+        <i class="fas fa-lightbulb text-yellow-500 text-lg px-2 "></i>
+        <h4 class="font-bold text-lg md:text-xl">Suggested Podcast Topics</h4>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        @for (topic of interviewer.suggested_topic; track $index) {
+          <span class="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 px-3 py-2 rounded-full text-sm font-medium border border-blue-200 hover:from-blue-200 hover:to-purple-200 transition-all duration-300 cursor-pointer">
+            {{ topic }}
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- Social Links -->
+    <div class="pt-2">
+      <h2 class="font-bold text-lg md:text-xl p-2">Social networking</h2>
+      <div class="flex flex-wrap gap-2">
+        @if (interviewer.linkedin) {
+          <a [href]="interviewer.linkedin" target="_blank" (click)="$event.stopPropagation()"
+             class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md">
+            <i class="fab fa-linkedin-in"></i>
+            <span class="text-sm font-medium">LinkedIn</span>
+          </a>
+        }
+
+        @if (interviewer.twitter) {
+          <a [href]="interviewer.twitter" target="_blank" (click)="$event.stopPropagation()"
+             class="flex items-center gap-2 bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md">
+            <i class="fab fa-twitter"></i>
+            <span class="text-sm font-medium">Twitter</span>
+          </a>
+        }
+
+        @if (interviewer.instagram) {
+          <a [href]="interviewer.instagram" target="_blank" (click)="$event.stopPropagation()"
+             class="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md">
+            <i class="fab fa-instagram"></i>
+            <span class="text-sm font-medium">Instagram</span>
+          </a>
+        }
+
+        @if (interviewer.tiktok) {
+          <a [href]="interviewer.tiktok" target="_blank" (click)="$event.stopPropagation()"
+             class="flex items-center gap-2 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md">
+            <i class="fab fa-tiktok"></i>
+            <span class="text-sm font-medium">TikTok</span>
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons Footer -->
+  <div class="bg-gray-50 px-4 md:px-6 lg:px-8 py-4 border-t border-gray-200">
+    <div class="flex flex-col sm:flex-row gap-3">
+      @if (interviewer.follower) {
+        <div class="hidden flex items-center justify-center gap-2 text-green-600 bg-green-50 px-4 py-3 rounded-lg border border-green-200">
+          <i class="fas fa-check-circle text-lg"></i>
+          <span class="font-semibold">Following</span>
+        </div>
+      } @else {
+        <button (click)="onFollowClick(); $event.stopPropagation()"
+                class="hidden flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md
+                hover:cursor-pointer hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300">
+          <i class="fas fa-user-plus"></i>
+          Follow
+        </button>
+      }
+      
+      <a [attr.href]="'/interviewers/' + interviewer.username" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-300 transform hover:cursor-pointer hover:scale-105 shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-gray-300">
+        <i class="fas fa-eye"></i>
+        View Profile
+      </a>
+    </div>
+  </div>
+</div>

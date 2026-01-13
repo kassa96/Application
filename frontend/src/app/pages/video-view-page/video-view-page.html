@@ -1,0 +1,130 @@
+<div>
+    <div class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-lg">
+    <div>
+       <app-navbar 
+      (searchChange)="onSearchChange($event)" 
+      (searchCleared)="onSearchCleared()"
+    ></app-navbar>
+    </div>
+  </div>
+  <div class="flex flex-col pt-22">
+    @if (singlePodcast()){
+         <aside class="flex px-4 py-2 items-center space-x-3 text-lg font-medium text-gray-900">
+          <a href="/podcasts" class="hover:text-indigo-600 transition">podcasts</a>
+
+  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+  </svg>
+
+  <span class="text-indigo-600 font-semibold cursor-default">{{ singlePodcast()?.topic }}</span>
+</aside>
+  <div class="max-w-8xl mx-auto px-4">
+    <div class="grid lg:grid-cols-3 gap-8">
+
+      <!-- Video Player Section -->
+      <div class="lg:col-span-2">
+        <!-- Video Player -->
+        @if (getSanitizedYoutubeUrl(singlePodcast()?.youtube_video_id)) {
+          <div class="video-container bg-black rounded-2xl overflow-hidden mb-6">
+            <iframe 
+              [src]="getSanitizedYoutubeUrl(singlePodcast()?.youtube_video_id)"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </div>
+        }
+
+        <!-- Episode Info Card -->
+        @if(singlePodcast()) {
+          <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex-1">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2 leading-tight">
+                  {{ singlePodcast()?.topic }}
+                </h2>
+                <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-eye"></i>
+                    {{ singlePodcast()?.view_count | number }} vues
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-heart"></i>
+                    {{ singlePodcast()?.like_count | number }} likes
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-clock"></i>
+                    {{ singlePodcast()?.duration_posted }}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fas fa-stopwatch"></i>
+                    {{ singlePodcast()?.duration }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="border-t pt-6">
+              <h3 class="font-semibold text-gray-900 mb-3">About this podcast</h3>
+              <p class="text-gray-700 leading-relaxed mb-4" [innerHTML]="descriptionHtml()"></p>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:col-span-1">
+
+        <!-- Interviewers Section -->
+        @if(interviewers().length > 0) {
+          <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">podcaster host & Guests</h3>
+
+            @for(interviewer of interviewers(); track interviewer.id) {
+               <app-interviewer-card [interviewer]="interviewer"></app-interviewer-card>
+            }
+          </div>
+        }
+
+        <!-- Similar Episodes Section -->
+        @if(similarPodcasts().length > 0) {
+          <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">similar podcasts</h3>
+            @for(video of similarPodcasts(); track video.id) {
+              <a [attr.href]="'/podcasts/' + video.topic_id" >
+                <div class="group cursor-pointer mb-4">
+                  <div class="flex gap-3">
+                    <div class="relative flex-shrink-0">
+                      <img [src]="video.logo_url" alt="Thumbnail" class="w-24 h-16 object-cover rounded-lg">
+                      <div class="absolute inset-0 bg-transparent transition-all rounded-lg flex items-center justify-center">
+                        <i class="fas fa-play text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                      </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                        {{ video.topic }}
+                      </h4>
+                      <p class="text-xs text-gray-600 mt-1">{{ video.duration }}</p>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            }
+          </div>
+        }
+
+      </div>
+
+    </div>
+  </div>
+  }
+  @if (!singlePodcast()) {
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+      <strong class="font-bold">Eror :</strong>
+      <span class="block sm:inline">This podcast is not referenced</span>
+    </div>
+  }
+</div>
+
+</div>

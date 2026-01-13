@@ -1,0 +1,10 @@
+    /* Cache la scrollbar pour WebKit browsers */
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* Assure que les éléments ne se chevauchent pas */
+    .scrollbar-hide {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
